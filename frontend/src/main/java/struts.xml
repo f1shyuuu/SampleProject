@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.devMode" value="true" />
+
+	<package name="order" extends="json-default" namespace="/order">
+
+		<action name="list" class="controllers.OrderAction" method="list">
+			<result name="success" type="json">
+				<param name="root">orders</param>
+			</result>
+		</action>
+	</package>
+
+	<package name="admin" extends="json-default" namespace="/admin">
+		<action name="listAll" class="controllers.AdminAction" method="listAll">
+			<result name="success">/admin.jsp</result>
+		</action>
+		<action name="change" class="controllers.AdminAction" method="change">
+			<result name="success" type="json">
+				<param name="root">order</param>
+			</result>
+		</action>
+		<action name="orderDetails" class="controllers.AdminAction"
+			method="orderDetails">
+			<result name="success">/order_details.jsp</result>
+		</action>
+	</package>
+	<package name="cart" extends="json-default" namespace="/cart">
+		<action name="add" class="controllers.CartAction" method="add">
+			<result name="success" type="json">
+				<param name="root">cartData</param>
+			</result>
+		</action>
+		<action name="remove" class="controllers.CartAction" method="remove">
+			<result name="success" type="json">
+				<param name="root">cartData</param>
+			</result>
+		</action>
+		<action name="clear" class="controllers.CartAction" method="clear">
+			<result name="success" type="json">
+				<param name="root">cartData</param>
+			</result>
+		</action>
+		<action name="checkout" class="controllers.CartAction" method="checkout">
+			<result name="success" type="json">
+				<param name="root">message</param>
+			</result>
+		</action>
+		<action name="discard" class="controllers.CartAction" method="discard">
+			<result name="success" > /welcome.jsp</result>
+		</action>
+
+	</package>
+	<package name="public" extends="struts-default" namespace="/check">
+		<action name="login" class="controllers.Login">
+			<result name="input">/login.jsp</result>
+			<result name="success">/welcome.jsp</result>
+			<result name="admin" type="redirect">/admin/listAll</result>
+		</action>
+
+		<action name="logout" class="controllers.Logout">
+			<result name="success" type="redirect">login</result>
+		</action>
+
+	</package>
+
+	<package name="login" extends="struts-default" namespace="/customer">
+		<interceptors>
+			<interceptor name="authentication" class="controllers.Authentication" />
+			<interceptor-stack name="adminStack">
+				<interceptor-ref name="authentication" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="adminStack" />
+		<global-results>
+			<result name="login">/login.jsp</result>
+		</global-results>
+		<action name="list" class="controllers.CustomerAction" method="list">
+			<result name="success">/photos.jsp</result>
+		</action>
+		<action name="users" class="controllers.CustomerAction" method="get">
+			<result name="success">/users.jsp</result>
+		</action>
+
+
+
+	</package>
+
+
+</struts>
